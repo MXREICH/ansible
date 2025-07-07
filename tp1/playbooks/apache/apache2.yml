@@ -1,0 +1,14 @@
+---
+- name: Playbook d'installation et configuration apache2
+  hosts: all
+  become: true
+  become_user: root
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Installer le paquet apache2
+      ansible.builtin.apt:
+        name: rt5-apache2={{ apache_package_version }}  
+        state: present
+        update_cache: true
