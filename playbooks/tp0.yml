@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  tasks: 
+  - name: Installer vim sur machinehosts
+    ansible.builtin.apt: 
+      name: vim
+      state: latest
+
+  - name: Vérifier la présence de /etc/passwd
+    ansible.builtin.file: 
+      name: /etc/passwd
+      state: file
+
+...
