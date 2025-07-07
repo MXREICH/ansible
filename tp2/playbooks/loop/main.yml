@@ -1,5 +1,4 @@
 ---
-
 - name: Playbook d'installation pour des loops 
   hosts: all
   become: true
