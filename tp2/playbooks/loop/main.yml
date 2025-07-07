@@ -1,0 +1,29 @@
+---
+- name: Playbook d'installation pour des loops 
+  hosts: all
+  become: true
+  become_user: root
+  vars_files:
+    - vars/main.yml
+  
+  tasks:
+    - name: Installation des packets nécessaires 
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: 
+        - mysql=8.0.42-0ubuntu0.24.04.1
+        - apache2=5.0.5+dfsg-2
+
+    - name: Vérification de l'installation de apache2
+      ansible.builtin.package_facts:
+        manager: auto
+    
+    - name: Copier index.html si apache est installé
+      ansible.builtin.copy:
+        src: files/index.html
+        dest: /var/www/html/index.html
+        mode: "0644"
+      when: "'apache2' in ansible_facts.packages"
+    
+      
