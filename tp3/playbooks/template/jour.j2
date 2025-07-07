@@ -2,13 +2,12 @@
 {% set current_hour = ansible_date_time.hour | int %}
 
 {% if current_day is divisibleby 2 %}
-<div>Pair et plus</div>
+Pair et plus
 {% else %}
-<div>Impair et plus</div>
+Impair et plus
 {% endif %}
-
 {% if current_hour > 12 %}
-<div>tard que midi</div>
+tard que midi
 {% else %}
-<div>tot que midi</div>  
+tot que midi
 {% endif %}
