@@ -1,0 +1,14 @@
+---
+
+- name: Playbook d'install d'une config webserv
+  hosts: all
+  become: true
+  become_user: root
+
+- name: Inclusion playbook wordpress.yml
+  ansible.builtin.import_playbook: wordpress.yml
+
+- name: Inclusion playbook mysql
+  ansible.builtin.import_playbook: sql.yml
+  
+

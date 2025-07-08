@@ -1,0 +1,11 @@
+--- 
+
+- name: Inclusion rôle mysql
+  hosts: db
+  become: true
+  become_user: root
+
+  roles:
+    - name: geerlingguy.mysql
+
+... 

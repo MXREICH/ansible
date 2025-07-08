@@ -1,0 +1,55 @@
+---
+
+- name: Rôle d'install et config d'une machine wordpress ready
+  hosts: web
+  become: true
+  become_user: root
+
+  roles:
+    - geerlingguy.apache
+  
+  tasks: 
+    - name: Installation et configuration packets nécessaires wordpress
+      ansible.builtin.apt:
+        name: 
+        -  ghostscript
+        -  libapache2-mod-php
+        -  mysql-server
+        -  php
+        -  php-bcmath
+        -  php-curl
+        -  php-imagick
+        -  php-intl
+        -  php-json
+        -  php-mbstring
+        -  php-mysql
+        -  php-xml
+        -  php-zip 
+
+    - name: Créer le directory de gestion d'install wordpress
+      ansible.builtin.file:
+        path: /srv/www
+        state: directory
+        mode: '0755'
+        owner: www-data
+        group: www-data
+    
+    - name: Télécharger et extraire wordpress
+      ansible.builtin.unarchive:
+        src: https://wordpress.org/latest.tar.gz
+        dest: /srv/www
+        remote_src: yes
+    
+    - name: Changer les permissions du dossier wordpress
+      ansible.builtin.file:
+        path: /srv/www
+        owner: www-data
+        group: www-data
+
+    - name: Configuration fichier wordpress.conf
+      ansible.builtin.template:
+        src: ../templates/wordpressconf.j2
+        dest: /etc/apache2/sites-available/wordpress.conf
+        mode: "0644"
+    
+...
