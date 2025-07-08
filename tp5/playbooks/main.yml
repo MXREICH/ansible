@@ -1,0 +1,21 @@
+---
+
+- name: Customisation de machines au travers d'inclusion de rôles
+  hosts: all
+  become: true
+  become_user: root
+
+  tasks:
+    - name: Exécuter la modification dans /etc/last_changed
+      ansible.builtin.template:
+        src: ../template/heure.j2
+        dest: /etc/last_changed
+        mode: "0644"
+
+- name: Inclusion tp3
+  ansible.builtin.import_playbook: tp3.yml
+
+- name: Inclusion tp4
+  ansible.builtin.import_playbook: tp4.yml
+
+...

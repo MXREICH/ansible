@@ -1,0 +1,8 @@
+---
+
+- name: Installation de docker en utilisant ansible-galaxy
+  hosts: all
+  roles:
+    - geerlingguy.docker
+
+...

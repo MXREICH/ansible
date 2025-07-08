@@ -1,0 +1,42 @@
+---
+
+- name: Installation custom de packets selon des groupes
+  hosts: all
+
+  tasks:
+    - name: Installation des packets selon son groupe
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ tp3_groupped_packages }}"
+
+    - name: Installation du packet ufw pour les machines ubuntu
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Récupérer les facts rpm
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Exécuter la modification de l'index selon les paquets
+      ansible.builtin.template:
+        src: ../template/template.j2
+        dest: /var/www/html/index.html
+        mode: "0644"
+      notify: Restart apache
+      when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
+
+    - name: Exécuter la modification dans /etc/jour
+      tags: jour
+      ansible.builtin.template:
+        src: ../template/jour.j2
+        dest: /etc/jour
+        mode: "0644"
+
+  handlers:
+    - name: Restart apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
