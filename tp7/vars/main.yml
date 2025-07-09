@@ -1,0 +1,5 @@
+
+csv_dest_file_path: /home/ambient-user/temperature.csv
+csv_src_url_path: https://raw.githubusercontent.com/MrMegaNova/advanced_ansible_course_07_2025/refs/heads/main/tp7/temperature.csv 
+api_src_url_path: /home/ambient-user/api.csv
+api_dest_file_path: https://api.open-meteo.com/v1/forecast?latitude=49.1191&longitude=6.1727&hourly=apparent_temperature&forecast_days=1 

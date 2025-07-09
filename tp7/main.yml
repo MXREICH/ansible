@@ -1,0 +1,33 @@
+--- 
+
+- name: Playbook d'exécution du TP7
+  hosts: all
+  vars_files:
+    - vars/main.yml
+
+  tasks: 
+    - name: Import du fichier csv depuis le repo git 
+      ansible.builtin.get_url:
+        url: "{{ csv_src_url_path }}"
+        dest: "{{ csv_dest_file_path }}"
+
+    - name: Import du csv dans une liste
+      ansible.builtin.set_fact:
+        src_temperature_list: "{{ csv_dest_file_path }}"
+
+    - name: Formatage par ordre suppression des doublons et ordre croissant
+      ansible.builtin.set_fact:
+        src_temperature_list_cleaned: "{{ src_temperature_list | unique() | community.general.version_sort }}"   
+
+    - name: Charger le fichier en vars
+      ansible.builtin.uri:
+        url: "https://api.open-meteo.com/v1/forecast?latitude=49.1191&longitude=6.1727&current=temperature_2m"
+        method: GET
+        return_content: true
+      register: response_temperature
+
+    - name: Extraire la liste de températures apparentes
+      ansible.builtin.set_fact:
+        json_temperature_list: "{{ response_temperature.json.current}}"
+
+    - debug: msg="{{ 'Il fait actuellement 20 degré' | reverse_string   }} "
