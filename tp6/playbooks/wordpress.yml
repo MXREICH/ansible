@@ -5,7 +5,8 @@
   become: true
   become_user: root
   vars_files: 
-    - vars/main.yml
+    - ../vars/main.yml
+    - ../vaults/db-secrets.yml
 
   roles:
     - geerlingguy.apache
@@ -16,7 +17,6 @@
         name: 
         -  ghostscript
         -  libapache2-mod-php
-        -  mysql-server
         -  php
         -  php-bcmath
         -  php-curl
@@ -30,7 +30,7 @@
 
     - name: Créer le directory de gestion d'install wordpress
       ansible.builtin.file:
-        path: /srv/www
+        path: /var/www/wordpress
         state: directory
         mode: '0755'
         owner: www-data
@@ -39,27 +39,19 @@
     - name: Télécharger et extraire wordpress
       ansible.builtin.unarchive:
         src: https://wordpress.org/latest.tar.gz
-        dest: /srv/www
-        remote_src: yes
+        dest: /var/www/
+        remote_src: true
     
     - name: Changer les permissions du dossier wordpress
       ansible.builtin.file:
-        path: /srv/www
+        path: /var/www/wordpress
         owner: www-data
         group: www-data
 
-    - name: Configuration fichier wordpress.conf
+    - name: Configuration fichier wp-config.php
       ansible.builtin.template:
-        src: ../templates/wordpressconf.j2
-        dest: /etc/apache2/sites-available/wordpress.conf
+        src: ../templates/wp-config.j2
+        dest: /var/www/wordpress/wp-config.php
         mode: "0644"
 
-    - name: Commandes pour activer le site
-      ansible.builtin.command:
-        cmd: sudo a2ensite wordpress
-
-    - name: Recharger le service apache
-      ansible.builtin.service:
-        name: apache2
-        state: reloaded 
 ...

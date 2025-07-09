@@ -4,6 +4,9 @@
   hosts: db
   become: true
   become_user: root
+  vars_files:
+    - ../vars/main.yml
+    - ../vaults/db-secrets.yml
 
   roles:
     - name: geerlingguy.mysql

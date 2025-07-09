@@ -1,7 +1,19 @@
-apache_vhosts:
-  - {servername: "10.0.0.67", documentroot: "/etc/apache2/sites-available/wordpress.conf"}
-
+# MySQL
 mysql_databases:
   - name: wordpress
     encoding: latin1
     collation: latin1_general_ci
+
+# Apache
+apache_listen_port: 8090
+apache_remove_default_vhost: true
+apache_create_vhosts: true
+
+apache_vhosts:
+  - {servername: "10.0.0.67", documentroot: "/var/www/wordpress"}
+
+# Wordpress vars
+
+wordpress_db_name: wordpress
+wordpress_db_username: wordpress
+wordpress_db_password: wordpress_secure_password
