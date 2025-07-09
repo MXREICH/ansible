@@ -4,6 +4,8 @@
   hosts: web
   become: true
   become_user: root
+  vars_files: 
+    - vars/main.yml
 
   roles:
     - geerlingguy.apache
@@ -51,5 +53,13 @@
         src: ../templates/wordpressconf.j2
         dest: /etc/apache2/sites-available/wordpress.conf
         mode: "0644"
-    
+
+    - name: Commandes pour activer le site
+      ansible.builtin.command:
+        cmd: sudo a2ensite wordpress
+
+    - name: Recharger le service apache
+      ansible.builtin.service:
+        name: apache2
+        state: reloaded 
 ...
